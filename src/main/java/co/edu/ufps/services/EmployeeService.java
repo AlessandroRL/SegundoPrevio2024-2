@@ -48,7 +48,7 @@ public class EmployeeService {
         Employee employee = (Employee) employeeRepository.findById(employeeId)
                 .orElseThrow();
         Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
+                .orElseThrow();
         employee.setDepartment(department);
         employeeRepository.save(employee);
     }
@@ -62,7 +62,7 @@ public class EmployeeService {
 
     public void assignEmployeeToProject(Long employeeId, Long projectId, int hours) {
         ProjectAssignment assignment = new ProjectAssignment();
-        ProjectAssignmentKey key = new ProjectAssignmentKey(employeeId, projectId);
+        ProjectAssignmentKey key = new ProjectAssignmentKey();
         assignment.setId(key);
         assignment.setHours(hours);
         projectAssignmentRepository.save(assignment);

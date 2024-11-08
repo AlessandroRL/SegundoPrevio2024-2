@@ -28,7 +28,7 @@ public class ProjectService {
                     project.setStartDate(updatedProject.getStartDate());
                     project.setEndDate(updatedProject.getEndDate());
                     return projectRepository.save(project);
-                }).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+                }).orElseThrow();
     }
 }
 
