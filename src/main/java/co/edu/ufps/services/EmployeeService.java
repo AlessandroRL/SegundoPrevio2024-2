@@ -6,6 +6,9 @@ import co.edu.ufps.repositories.EmployeeRepository;
 import co.edu.ufps.repositories.ProjectAssignmentRepository;
 import co.edu.ufps.repositories.DepartmentRepository;
 import co.edu.ufps.entities.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +25,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Optional<Employee> findEmployeeById(Long id) {
+    public Optional<Object> findEmployeeById(Long id) {
         return employeeRepository.findById(id);
     }
 
@@ -31,19 +34,19 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee(Long id, Employee updatedEmployee) {
-        return employeeRepository.findById(id)
+        return (Employee) employeeRepository.findById(id)
                 .map(employee -> {
                     employee.setFirstName(updatedEmployee.getFirstName());
                     employee.setLastName(updatedEmployee.getLastName());
                     employee.setBirthDate(updatedEmployee.getBirthDate());
                     employee.setSex(updatedEmployee.getSex());
                     return employeeRepository.save(employee);
-                }).orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+                }).orElseThrow();
     }
 
     public void addDepartmentToEmployee(Long employeeId, Long departmentId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+        Employee employee = (Employee) employeeRepository.findById(employeeId)
+                .orElseThrow();
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
         employee.setDepartment(department);
@@ -51,8 +54,8 @@ public class EmployeeService {
     }
 
     public void removeDepartmentFromEmployee(Long employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+        Employee employee = (Employee) employeeRepository.findById(employeeId)
+                .orElseThrow();
         employee.setDepartment(null);
         employeeRepository.save(employee);
     }
